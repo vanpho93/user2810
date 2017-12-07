@@ -18,18 +18,27 @@ app.get('/signup', (req, res) => {
     res.render('signup');
 });
 
-app.post('/signin', parser, (req, res) => {
-    const { email, password } = req.body;
-    User.findOne({ email })
-    .then(user => {
+app.post('/signin', parser, async (req, res) => {
+    try {
+        const { email, password } = req.body;
+        const user = await User.findOne({ email });
         if (!user) return res.send('Kiem tra lai thong tin dang nhap.');
-        return compare(password, user.password)
-    })
-    .then(same => {
+        const same = await compare(password, user.password);
         if (same) return res.send('Dang nhap thanh cong.');
         res.send('Kiem tra lai thong tin dang nhap.');
-    })
-    .catch(err => res.send(err));
+    } catch (err) {
+        res.send(err);
+    }
+    // User.findOne({ email })
+    // .then(user => {
+    //     if (!user) return res.send('Kiem tra lai thong tin dang nhap.');
+    //     return compare(password, user.password)
+    // })
+    // .then(same => {
+    //     if (same) return res.send('Dang nhap thanh cong.');
+    //     res.send('Kiem tra lai thong tin dang nhap.');
+    // })
+    // .catch(err => res.send(err));
 });
 
 app.post('/signup', parser, (req, res) => {
