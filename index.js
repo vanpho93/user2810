@@ -2,7 +2,8 @@ const express = require('express');
 const parser = require('body-parser').urlencoded({ extended: false });
 const reload = require('reload');
 const { hash, compare } = require('bcrypt');
-const User = require('./db');
+require('./db');
+const User = require('./models/User');
 
 const app = express();
 app.set('view engine', 'ejs');
@@ -29,16 +30,6 @@ app.post('/signin', parser, async (req, res) => {
     } catch (err) {
         res.send(err);
     }
-    // User.findOne({ email })
-    // .then(user => {
-    //     if (!user) return res.send('Kiem tra lai thong tin dang nhap.');
-    //     return compare(password, user.password)
-    // })
-    // .then(same => {
-    //     if (same) return res.send('Dang nhap thanh cong.');
-    //     res.send('Kiem tra lai thong tin dang nhap.');
-    // })
-    // .catch(err => res.send(err));
 });
 
 app.post('/signup', parser, (req, res) => {
