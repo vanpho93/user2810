@@ -19,6 +19,11 @@ app.get('/signup', (req, res) => {
     res.render('signup');
 });
 
+app.get('/account', (req, res) => {
+    // Da dang nhap vao thi show ra 'Bang dieu khien'
+    // Rediect toi /signin
+});
+
 app.post('/signin', parser, async (req, res) => {
     const { email, password } = req.body;
     User.signIn(email, password)
