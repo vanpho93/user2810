@@ -20,27 +20,17 @@ app.get('/signup', (req, res) => {
 });
 
 app.post('/signin', parser, async (req, res) => {
-    try {
-        const { email, password } = req.body;
-        const user = await User.findOne({ email });
-        if (!user) return res.send('Kiem tra lai thong tin dang nhap.');
-        const same = await compare(password, user.password);
-        if (same) return res.send('Dang nhap thanh cong.');
-        res.send('Kiem tra lai thong tin dang nhap.');
-    } catch (err) {
-        res.send(err);
-    }
+    const { email, password } = req.body;
+    User.signIn(email, password)
+    .then(() => res.send('Dang nhap thanh cong'))
+    .catch(() => res.send('Dang nhap that bai'));
 });
 
 app.post('/signup', parser, (req, res) => {
     const { email, password, name, phone } = req.body;
-    hash(password, 8)
-    .then(encrypted => {
-        const user = new User({ email, password: encrypted, name, phone });
-        return user.save()
-    })
-    .then(() => res.send('sign up sucessfully'))
-    .catch(err => res.send(err));
+    User.signUp(email, password, name, phone)
+    .then(() => res.send('Dang ky thanh cong'))
+    .catch(() => res.send('Email da ton tai'));
 });
 
 app.listen(3000, () => console.log('Server started'));
